@@ -19,4 +19,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Pokedex.Api\Pokedex.Api.csproj" />
+    <ProjectReference Include="..\Pokedex.Domain\Pokedex.Domain.csproj" />
+    <ProjectReference Include="..\Pokedex.Infrastructure\Pokedex.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
