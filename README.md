@@ -22,6 +22,9 @@ Both API Clients (`PokeApi` and `FunTranslations`) are very very simple, just re
 ## Future improvements
 Possibly adding `Polly` to handle errors, retry unsuccessful calls, etc.
 
+## Production API
+
+Add support to HTTPS or host it behind a load balancer that has HTTPS.
 
 ## Usage
 
