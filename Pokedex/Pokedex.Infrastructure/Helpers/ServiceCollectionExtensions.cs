@@ -8,7 +8,7 @@ using Pokedex.Infrastructure.Services;
 using Pokedex.Infrastructure.Transformers;
 using System.Linq;
 
-namespace Pokedex.Infrastructure.Helpers
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

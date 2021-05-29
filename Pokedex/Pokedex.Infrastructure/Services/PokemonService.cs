@@ -13,10 +13,10 @@ namespace Pokedex.Infrastructure.Services
     public class PokemonService : IPokemonService
     {
         private readonly IPokemonDataAdapter _pokemonDataAdapter;
-        private readonly Dictionary<PokemonTransformationActions, IEnumerable<IPokemonTransformer>> _transformations;
+        private readonly Dictionary<PokemonTransformationActions, List<IPokemonTransformer>> _transformations;
         private readonly ILogger<PokemonService> _logger;
         public PokemonService(IPokemonDataAdapter pokemonDataAdapter,
-            Dictionary<PokemonTransformationActions, IEnumerable<IPokemonTransformer>> transformations,
+            Dictionary<PokemonTransformationActions, List<IPokemonTransformer>> transformations,
             ILogger<PokemonService> logger)
         {
             _pokemonDataAdapter = pokemonDataAdapter;
