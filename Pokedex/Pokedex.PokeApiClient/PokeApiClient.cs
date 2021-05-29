@@ -11,15 +11,16 @@ namespace Pokedex.PokeApiClient
     public class PokeApiClient : IPokeApiClient
     {
         private readonly HttpClient _httpClient;
-        public PokeApiClient(HttpClient httpClient, IOptionsSnapshot<PokeApiClientConfiguration> options)
+        private readonly PokeApiClientConfiguration _configuration;
+        public PokeApiClient(HttpClient httpClient, IOptions<PokeApiClientConfiguration> options)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(options.Value.BaseUrl);
+            _configuration = options.Value;
         }
 
         public Task<Pokemon> GetPokemonByNameAsync(string name)
         {
-            return _httpClient.GetFromJsonAsync<Pokemon>($"pokemon/{name}");
+            return _httpClient.GetFromJsonAsync<Pokemon>($"{_configuration.BaseUrl}/pokemon/{name}");
         }
 
         public Task<T> RequestByNamedApiResource<T>(NamedApiResource resource)

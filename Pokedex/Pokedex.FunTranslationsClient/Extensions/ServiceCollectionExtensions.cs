@@ -10,7 +10,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddHttpClient<IFunTranslationsClient, FunTranslationsClient>();
 
-            services.Configure<FunTranslationsClientConfiguration>(configuration.GetSection(FunTranslationsClientConfiguration.PokeApiConfigurationSection));
+            services.Configure<FunTranslationsClientConfiguration>(
+                configuration.GetSection(FunTranslationsClientConfiguration.FunTranslationsClientConfigurationSection));
 
             return services;
         }

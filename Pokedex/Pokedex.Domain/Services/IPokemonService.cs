@@ -2,7 +2,7 @@
 using Pokedex.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace Pokedex.Domain.Gateways
+namespace Pokedex.Domain.Services
 {
     public interface IPokemonService
     {
