@@ -1,4 +1,5 @@
-﻿using Pokedex.Domain.Entities;
+﻿using Microsoft.Extensions.Logging;
+using Pokedex.Domain.Entities;
 using Pokedex.Domain.Transformers;
 using Pokedex.FunTranslationsClient;
 using Pokedex.FunTranslationsClient.Models;
@@ -12,19 +13,33 @@ namespace Pokedex.Infrastructure.Transformers
         public PokemonTransformationActions TransformationType => PokemonTransformationActions.TranslateDescription;
 
         private readonly IFunTranslationsClient _funTranslationsClient;
-        public YodaDescriptionPokemonTransformer(IFunTranslationsClient funTranslationsClient)
+        private readonly ILogger<YodaDescriptionPokemonTransformer> _logger;
+        public YodaDescriptionPokemonTransformer(IFunTranslationsClient funTranslationsClient, ILogger<YodaDescriptionPokemonTransformer> logger)
         {
             _funTranslationsClient = funTranslationsClient;
+            _logger = logger;
         }
 
         public bool IsValidForTransformation(Pokemon pokemon)
-            => !(pokemon.Habitat.Equals("cave", StringComparison.OrdinalIgnoreCase) || pokemon.IsLegendary);
+            => pokemon.Habitat.Equals("cave", StringComparison.OrdinalIgnoreCase) || pokemon.IsLegendary;
 
         public async Task<Pokemon> Transform(Pokemon pokemon)
         {
-            var translation = await _funTranslationsClient.TranslateText(pokemon.Description, TranslationType.Yoda);
+            if (!IsValidForTransformation(pokemon))
+                return pokemon;
 
-            return new Pokemon(pokemon.Name, translation, pokemon.Habitat, pokemon.IsLegendary);
+            try
+            {
+                var translation = await _funTranslationsClient.TranslateText(pokemon.Description, TranslationType.Yoda);
+
+                return new Pokemon(pokemon.Name, translation, pokemon.Habitat, pokemon.IsLegendary);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Yoda translation failed.");
+
+                return pokemon;
+            }
         }
     }
 }

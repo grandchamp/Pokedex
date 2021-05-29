@@ -12,13 +12,11 @@ namespace Pokedex.FunTranslationsClient
     public class FunTranslationsClient : IFunTranslationsClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptionsSnapshot<FunTranslationsClientConfiguration> _options;
-        public FunTranslationsClient(HttpClient httpClient, IOptionsSnapshot<FunTranslationsClientConfiguration> options)
+        private readonly FunTranslationsClientConfiguration _options;
+        public FunTranslationsClient(HttpClient httpClient, IOptions<FunTranslationsClientConfiguration> options)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(_options.Value.BaseUrl);
-
-            _options = options;
+            _options = options.Value;
         }
 
         public async Task<string> TranslateText(string text, TranslationType translationType)
@@ -30,7 +28,7 @@ namespace Pokedex.FunTranslationsClient
                 ["text"] = text
             });
 
-            var response = await _httpClient.PostAsync(endpoint, parameters);
+            var response = await _httpClient.PostAsync($"{_options.BaseUrl}/{endpoint}", parameters);
 
             response.EnsureSuccessStatusCode();
 
@@ -45,6 +43,6 @@ namespace Pokedex.FunTranslationsClient
         }
 
         private string GetTranslationEndpoint(TranslationType translationType)
-            => _options.Value.TranslationTypeEndpoints[translationType.ToString()];
+            => _options.TranslationTypeEndpoints[translationType.ToString()];
     }
 }
